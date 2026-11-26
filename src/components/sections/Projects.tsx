@@ -368,8 +368,9 @@ function OpenPanel({
           display: flex;
           width: 100%;
           height: 100%;
-          gap: 40px;
+          gap: 20px;
           animation: fadeIn 0.35s ease-out 0.2s both;
+          flex-direction: column;
         }
 
         @keyframes fadeIn {
@@ -388,6 +389,10 @@ function OpenPanel({
           min-width: 0;
           flex: 1;
           overflow-y: auto;
+        }
+
+        .open-panel-right {
+          display: none;
         }
 
         .kicker {

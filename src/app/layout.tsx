@@ -7,7 +7,7 @@ const serif = localFont({ src: [{ path: "../fonts/InstrumentSerif.woff2", style:
 const mono = localFont({ src: "../fonts/JetBrainsMono.woff2", variable: "--f-mono", weight: "100 800", display: "swap" });
 export const metadata: Metadata = {
   title: `${PROFILE.name} — ${PROFILE.role}`, description: PROFILE.resumeSummary.split(". ")[0] + ".",
-  openGraph: { title: PROFILE.name, description: PROFILE.role, images: ["/og.jpg"] }, icons: { icon: "/favicon.png" },
+  openGraph: { title: PROFILE.name, description: PROFILE.role, images: ["/og.jpg"] }, icons: { icon: "/favicon.svg" },
 };
 export const viewport: Viewport = { themeColor: "#f4f2ee", width: "device-width", initialScale: 1 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {

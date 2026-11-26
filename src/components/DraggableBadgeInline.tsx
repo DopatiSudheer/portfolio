@@ -339,7 +339,10 @@ export default function DraggableBadgeInline() {
             {/* Front side */}
             <div className="face front">
               <div className="band">ID</div>
-              <p className="nm" style={{ marginTop: "24px" }}>Sudheer Kumar Dopati</p>
+              <div className="ph">
+                <img src="/portrait.jpg" alt="Sudheer Kumar Dopati" />
+              </div>
+              <p className="nm">Sudheer Kumar Dopati</p>
               <p className="rl">Java Backend Developer (Fresher)</p>
               <div className="rows">
                 <div>

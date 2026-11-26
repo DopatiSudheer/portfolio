@@ -143,9 +143,10 @@ const css = `
   inset: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 28px;
-  padding: clamp(20px, 2.4vw, 32px);
-  min-width: min(880px, 100%);
+  gap: clamp(16px, 2vw, 28px);
+  padding: clamp(16px, 2vw, 24px);
+  min-width: 100%;
+  max-width: 100%;
   opacity: 0;
   transform: translateX(24px);
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -167,7 +168,8 @@ const css = `
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
-  padding-right: 8px;
+  padding-right: 4px;
+  min-width: 0;
 }
 
 .body-left::-webkit-scrollbar {
@@ -193,8 +195,8 @@ const css = `
 }
 
 .body-desc {
-  font-size: 14.5px;
-  line-height: 1.55;
+  font-size: 13.5px;
+  line-height: 1.5;
   color: #3a3a3a;
   margin: 0;
   flex-shrink: 0;
@@ -228,13 +230,14 @@ const css = `
 .tech-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 28px;
-  padding: 0 10px;
+  gap: 3px;
+  height: 24px;
+  padding: 0 8px;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
-  font-size: 12px;
+  font-size: 11px;
   background: #f9f9f9;
+  flex-shrink: 0;
 }
 
 .tech-icon {
@@ -253,16 +256,17 @@ const css = `
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 40px;
-  padding: 0 16px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   text-decoration: none;
   transition: transform 0.3s, background 0.3s, color 0.3s;
   border: none;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-primary {

@@ -100,7 +100,7 @@ export const PROJECTS = [
   { id: "hms", index: "01", title: "Hospital Management System", kicker: "PERSONAL PROJECT · JAN 2026 – APR 2026", period: "Jan 2026 – Apr 2026",
     description: "Backend healthcare modules coordinating 3 distinct workflows: scheduled patient appointment booking, clinical medical history records tracking, and departmental administrative management portals.",
     features: ["Role-Based Access Control (RBAC) securing endpoints and workflows across Admin, Doctor, and Patient portals", "Secure Spring Boot REST APIs across 2 primary service controllers", "Standardized JSON payloads with semantic HTTP status codes and custom exceptions", "DTO mapping to decouple domain entities from API layers", "CORS policies and request validation to protect sensitive clinical data", "6 normalized MySQL tables with cascading foreign keys managing user roles, appointments, and medical history"],
-    tech: ["Java", "Spring Boot", "JPA", "SQL", "Postman"], github: "https://github.com/DopatiSudheer/hospital-management-backend", live: "https://hospital-management-frontend-xi.vercel.app", liveLabel: "Live Demo",
+    tech: ["Java", "Spring Boot", "JPA", "SQL", "Postman"], github: null as string | null, live: "https://hospital-management-frontend-xi.vercel.app", liveLabel: "Live",
     workflow: [
       { label: "SCHEMA", desc: "SCHEMA" },
       { label: "REQUEST", desc: "Client → REST API" },

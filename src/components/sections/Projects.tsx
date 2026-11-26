@@ -385,7 +385,8 @@ function OpenPanel({
           display: flex;
           flex-direction: column;
           padding: 34px;
-          min-width: 1100px;
+          min-width: 0;
+          flex: 1;
           overflow-y: auto;
         }
 

@@ -97,14 +97,32 @@ export const EDUCATION = [
   { id: "btech", period: "OCT-2022 to APR-2026", title: "B.Tech, Computer Science and Engineering", place: "Sri Venkateswara College of Engineering and Technology, Chittoor", detail: "CGPA 8.01 / 10.0", achievements: ["Microprocessor and Interfacing (NPTEL) - 62.0%", "Human Computer Interaction (NPTEL) - 80.0%"], gradYear: "2026" },
 ];
 export const PROJECTS = [
-  { id: "hms", index: "01", title: "Hospital Management System", kicker: "Jan 2026 – Apr 2026", period: "Jan 2026 – Apr 2026",
+  { id: "hms", index: "01", title: "Hospital Management System", kicker: "PERSONAL PROJECT · JAN 2026 – APR 2026", period: "Jan 2026 – Apr 2026",
     description: "Backend healthcare modules coordinating 3 distinct workflows: scheduled patient appointment booking, clinical medical history records tracking, and departmental administrative management portals.",
-    features: ["Secure Spring Boot REST APIs across 2 primary service controllers", "Standardized JSON payloads with semantic HTTP status codes and custom exceptions", "DTO mapping to decouple domain entities from API layers", "CORS policies and request payload validation", "6 normalized MySQL tables with cascading foreign keys", "Endpoints verified with Postman test collections"],
-    tech: ["Java", "Spring Boot", "JPA", "MySQL", "Postman"], github: null as string | null, live: "https://hospital-management-frontend-xi.vercel.app", liveLabel: "Live Demo" },
-  { id: "jobportal", index: "02", title: "Job Portal RESTful Backend", kicker: "May 2026 – Sep 2026", period: "May 2026 – Sep 2026",
+    features: ["Role-Based Access Control (RBAC) securing endpoints and workflows across Admin, Doctor, and Patient portals", "Secure Spring Boot REST APIs across 2 primary service controllers", "Standardized JSON payloads with semantic HTTP status codes and custom exceptions", "DTO mapping to decouple domain entities from API layers", "CORS policies and request validation to protect sensitive clinical data", "6 normalized MySQL tables with cascading foreign keys managing user roles, appointments, and medical history"],
+    tech: ["Java", "Spring Boot", "JPA", "SQL", "Postman"], github: "https://github.com/DopatiSudheer/hospital-management-backend", live: "https://hospital-management-frontend-xi.vercel.app", liveLabel: "Live Demo",
+    workflow: [
+      { label: "SCHEMA", desc: "SCHEMA" },
+      { label: "REQUEST", desc: "Client → REST API" },
+      { label: "DTO", desc: "Entity ↔ DTO mapping" },
+      { label: "SERVICE", desc: "Services · Endpoints · Logic" },
+      { label: "API", desc: "Controller → Service → Repo" },
+      { label: "JPA", desc: "Spring Data JPA → MySQL" },
+    ]
+  },
+  { id: "jobportal", index: "02", title: "Job Portal RESTful Backend", kicker: "PERSONAL PROJECT · MAY 2026 – SEP 2026", period: "May 2026 – Sep 2026",
     description: "Modular REST endpoints across a 3-tier Controller-Service-Repository pattern, with containerized backend and database services orchestrated via Docker Compose and persistent volume mounts.",
     features: ["Stateless auth with Spring Security and JWT, custom filter pipelines", "Role-Based Access Control for 3 user roles", "BCrypt hashing, Jakarta Validation, global exception handling", "Bidirectional mappings; N+1 fixed with tuned JOIN FETCH", "API contracts documented in Swagger UI", "Postman regression collections and logging diagnostics"],
-    tech: ["Java", "Spring Boot", "JPA", "MySQL", "Docker", "JWT"], github: null as string | null, live: "https://sk-jobportal.vercel.app", liveLabel: "sk-jobportal.vercel.app" },
+    tech: ["Java", "Spring Boot", "JPA", "MySQL", "Docker", "JWT"], github: null as string | null, live: "https://sk-jobportal.vercel.app", liveLabel: "Live",
+    workflow: [
+      { label: "SCHEMA", desc: "SCHEMA" },
+      { label: "JWT", desc: "Token-validation filter" },
+      { label: "DTO", desc: "Entity ↔ DTO mapping" },
+      { label: "RBAC", desc: "Role-based access (3 roles)" },
+      { label: "API", desc: "Controller → Service → Repo" },
+      { label: "DOCKER", desc: "Docker Compose orchestration" },
+    ]
+  },
 ];
 export const CERTIFICATIONS = [
   { title: "Microprocessor and Interfacing", issuer: "NPTEL", grade: "Elite", score: "62.0%", duration: "Jan-2025" },

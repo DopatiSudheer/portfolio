@@ -1,718 +1,516 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PROJECTS } from "@/lib/data";
 
-const TECH_LOGOS: { [key: string]: string } = {
-  "Java": "☕",
-  "Spring Boot": "🍃",
-  "JPA": "📊",
-  "MySQL": "🗄️",
-  "Docker": "🐳",
-  "JWT": "🔑",
-  "Postman": "📮",
-};
-
-export default function Projects() {
-  const [activeProject, setActiveProject] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mediaQuery.matches);
-    
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      setActiveProject((p) => (p - 1 + PROJECTS.length) % PROJECTS.length);
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setActiveProject((p) => (p + 1) % PROJECTS.length);
-    }
-  };
-
-  const isOpen = (idx: number) => idx === activeProject;
-
-  return (
-    <section id="work" className="projects" aria-label="Selected work">
-      <div className="wrap">
-        <div className="projects-header">
-          <h2 className="projects-label">03 — SELECTED WORK</h2>
-          <h3 className="projects-title">
-            Things I've <span className="projects-subtitle">built.</span>
-          </h3>
-          <div className="projects-divider" />
-        </div>
-
-        <div className="gallery-container">
-          <div className="panels-row" role="tablist">
-            {PROJECTS.map((project, idx) => (
-              <button
-                key={project.id}
-                className={`panel ${isOpen(idx) ? "open" : "closed"}`}
-                role="tab"
-                aria-selected={isOpen(idx)}
-                aria-expanded={isOpen(idx)}
-                aria-controls={`panel-${project.id}`}
-                onMouseEnter={() => setActiveProject(idx)}
-                onClick={() => setActiveProject(idx)}
-                onKeyDown={handleKeyDown}
-              >
-                {isOpen(idx) ? (
-                  <OpenPanel project={project} reducedMotion={reducedMotion} />
-                ) : (
-                  <ClosedPanel project={project} />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        .projects {
-          padding: 120px 20px;
-          background: #f4f2ee;
-          margin-bottom: 200px;
-          padding-bottom: 120px;
-        }
-
-        .wrap {
-          max-width: 100%;
-          margin: 0 auto;
-        }
-
-        .projects-header {
-          margin-bottom: 60px;
-        }
-
-        .projects-label {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: #999;
-          margin: 0 0 16px 0;
-        }
-
-        .projects-title {
-          font-family: "Inter Tight", sans-serif;
-          font-size: clamp(40px, 7vw, 72px);
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          line-height: 1;
-          color: #0d0d0d;
-          margin: 0;
-        }
-
-        .projects-subtitle {
-          font-style: italic;
-          font-weight: 400;
-          color: #666;
-          font-family: "Instrument Serif", serif;
-        }
-
-        .projects-divider {
-          width: 100%;
-          height: 1px;
-          background: #999;
-          margin-top: 20px;
-        }
-
-        .gallery-container {
-          width: 100%;
-          overflow: visible;
-        }
-
-        .panels-row {
-          display: flex;
-          gap: 16px;
-          height: auto;
-          min-height: min(90svh, 760px);
-        }
-
-        .panel {
-          display: flex;
-          flex: 1;
-          border: none;
-          background: none;
-          padding: 0;
-          cursor: pointer;
-          border-radius: 34px;
-          background: white;
-          border: 1px solid rgba(13, 13, 13, 0.1);
-          box-shadow: 0 24px 60px -34px rgba(13, 13, 13, 0.25);
-          overflow: hidden;
-          min-width: 0;
-          transition: flex 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-          outline: none;
-          position: relative;
-        }
-
-        .panel:focus-visible {
-          outline: 2px solid #000;
-          outline-offset: 2px;
-        }
-
-        .panel.open {
-          flex: 8;
-        }
-
-        .panel.closed {
-          flex: 1;
-          cursor: pointer;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .panel {
-            transition: none;
-          }
-        }
-
-        @media (max-width: 820px) {
-          .panels-row {
-            flex-direction: column;
-            height: auto;
-            gap: 12px;
-          }
-
-          .panel {
-            border-radius: 28px;
-            height: 72px;
-            flex: none;
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-          }
-
-          .panel.open {
-            grid-template-rows: 1fr;
-            height: auto;
-          }
-
-          .panel-content {
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-    </section>
-  );
+const css = `
+.work-section {
+  padding: 60px 20px;
+  background: #f4f2ee;
 }
 
-interface Project {
-  id: string;
-  index: string;
-  title: string;
-  kicker: string;
-  description: string;
-  features: string[];
-  tech: string[];
-  github: string | null;
-  live: string | null;
-  liveLabel: string;
+.work-wrap {
+  max-width: 1320px;
+  margin: 0 auto;
 }
 
-function ClosedPanel({ project }: { project: Project }) {
-  return (
-    <div className="spine">
-      <div className="spine-number">{project.index}</div>
-      <div className="spine-title">{project.title}</div>
-      <div className="spine-plus">+</div>
-
-      <style>{`
-        .spine {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-          padding: 24px 16px;
-          position: relative;
-          text-align: center;
-        }
-
-        .spine-number {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 12px;
-          font-weight: 700;
-          color: #999;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          flex-shrink: 0;
-        }
-
-        .spine-title {
-          font-family: "Inter Tight", sans-serif;
-          font-size: 22px;
-          font-weight: 700;
-          color: #0d0d0d;
-          writing-mode: vertical-rl;
-          transform: rotate(180deg);
-          letter-spacing: -0.02em;
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .spine-plus {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          border: 1px solid rgba(13, 13, 13, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
-          font-weight: 600;
-          color: #0d0d0d;
-          flex-shrink: 0;
-          background: white;
-          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .spine:hover .spine-plus {
-          transform: rotate(90deg);
-        }
-
-        @media (max-width: 820px) {
-          .spine {
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-          }
-
-          .spine-number {
-            order: 1;
-          }
-
-          .spine-title {
-            order: 2;
-            writing-mode: horizontal-tb;
-            transform: none;
-            flex: 1;
-            margin: 0 20px;
-            text-align: left;
-            font-size: 16px;
-          }
-
-          .spine-plus {
-            order: 3;
-          }
-        }
-      `}</style>
-    </div>
-  );
+.work-header {
+  margin-bottom: 60px;
 }
 
-function OpenPanel({
-  project,
-  reducedMotion,
-}: {
-  project: Project;
-  reducedMotion: boolean;
-}) {
-  return (
-    <div className="open-panel">
-      <div className="open-panel-left">
-        <div className="kicker">{project.kicker}</div>
-        <h3 className="open-title">{project.title}</h3>
-        <p className="open-description">{project.description}</p>
-
-        <div className="features-grid">
-          {project.features.slice(0, 6).map((feature, idx) => (
-            <div key={idx} className="feature-cell">
-              {feature}
-            </div>
-          ))}
-        </div>
-
-        <div className="tech-chips">
-          {project.tech.map((tech) => (
-            <div key={tech} className="tech-chip">
-              <span className="tech-logo">{TECH_LOGOS[tech] || "⚙️"}</span>
-              <span className="tech-label">{tech}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="button-group">
-          {project.github && (
-            <a href={project.github} className="btn btn-primary">
-              View on GitHub ↗
-            </a>
-          )}
-          {project.live && (
-            <a href={project.live} className="btn btn-ghost">
-              Live ↗
-            </a>
-          )}
-        </div>
-      </div>
-
-      <div className="open-panel-right">
-        <IllustrativeUI project={project} />
-      </div>
-
-      <style>{`
-        .open-panel {
-          display: flex;
-          width: 100%;
-          height: 100%;
-          gap: 20px;
-          animation: fadeIn 0.35s ease-out 0.2s both;
-          flex-direction: column;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        .open-panel-left {
-          display: flex;
-          flex-direction: column;
-          padding: 34px;
-          min-width: 0;
-          flex: 1;
-          overflow-y: auto;
-        }
-
-        .open-panel-right {
-          display: none;
-        }
-
-        .kicker {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          color: #999;
-          margin: 0 0 20px 0;
-        }
-
-        .open-title {
-          font-family: "Inter Tight", sans-serif;
-          font-size: 58px;
-          font-weight: 700;
-          letter-spacing: -0.045em;
-          line-height: 1;
-          color: #0d0d0d;
-          margin: 0 0 20px 0;
-        }
-
-        .open-description {
-          font-size: 17px;
-          line-height: 1.55;
-          color: #3a3a3a;
-          max-width: 620px;
-          margin: 0 0 30px 0;
-        }
-
-        .features-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0;
-          margin: 30px 0;
-          border-top: 1px solid rgba(13, 13, 13, 0.1);
-        }
-
-        .feature-cell {
-          padding: 14px 15px;
-          border-bottom: 1px solid rgba(13, 13, 13, 0.1);
-          border-right: 1px solid rgba(13, 13, 13, 0.1);
-          font-size: 15px;
-          line-height: 1.4;
-          color: #3a3a3a;
-        }
-
-        .feature-cell:nth-child(even) {
-          border-right: none;
-        }
-
-        .feature-cell:nth-child(5),
-        .feature-cell:nth-child(6) {
-          border-bottom: none;
-        }
-
-        .tech-chips {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin: 30px 0;
-        }
-
-        .tech-chip {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 12px;
-          border: 1px solid rgba(13, 13, 13, 0.1);
-          border-radius: 20px;
-          font-size: 14px;
-          background: white;
-          color: #0d0d0d;
-        }
-
-        .tech-logo {
-          font-size: 16px;
-        }
-
-        .tech-label {
-          font-weight: 500;
-        }
-
-        .button-group {
-          display: flex;
-          gap: 12px;
-          margin-top: auto;
-          padding-top: 20px;
-        }
-
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          height: 52px;
-          padding: 0 24px;
-          border: 1px solid rgba(13, 13, 13, 0.1);
-          border-radius: 8px;
-          font-family: "Inter Tight", sans-serif;
-          font-size: 14px;
-          font-weight: 600;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          cursor: pointer;
-        }
-
-        .btn-primary {
-          background: #0d0d0d;
-          color: white;
-          border: 1px solid #0d0d0d;
-        }
-
-        .btn-primary:hover {
-          background: white;
-          color: #0d0d0d;
-        }
-
-        .btn-ghost {
-          background: white;
-          color: #0d0d0d;
-          border: 1px solid #0d0d0d;
-        }
-
-        .btn-ghost:hover {
-          background: #0d0d0d;
-          color: white;
-        }
-
-        .open-panel-right {
-          display: flex;
-          flex: 1;
-          overflow: hidden;
-        }
-
-        @media (max-width: 820px) {
-          .open-panel {
-            flex-direction: column;
-            gap: 20px;
-          }
-
-          .open-panel-left {
-            min-width: auto;
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 100%;
-          }
-
-          .open-title {
-            font-size: 28px;
-          }
-
-          .open-description {
-            font-size: 14px;
-          }
-
-          .features-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .feature-cell {
-            border-right: none !important;
-          }
-
-          .open-panel-right {
-            padding: 0 20px 20px;
-            min-height: 300px;
-          }
-        }
-      `}</style>
-    </div>
-  );
+.work-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 16px 0;
 }
 
-function IllustrativeUI({ project }: { project: Project }) {
-  const mockRows = [
-    { tag: "REQUEST", text: "Client → REST API" },
-    { tag: "DTO", text: "Entity ↔ DTO mapping" },
-    { tag: "SERVICE", text: "Services · Endpoints · Logic" },
-    { tag: "API", text: "Controller → Service → Repo" },
-    { tag: "JPA", text: "Spring Data JPA → MySQL" },
-  ];
+.work-title {
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #0d0d0d;
+  margin: 0;
+}
 
-  if (project.id === "jobportal") {
-    mockRows[0] = { tag: "JWT", text: "Token-validation filter" };
-    mockRows[2] = { tag: "RBAC", text: "Role-based access (3 roles)" };
-    mockRows[4] = { tag: "DOCKER", text: "Docker Compose orchestration" };
+.work-subtitle {
+  font-style: italic;
+  font-weight: 400;
+  color: #666;
+  font-family: "Instrument Serif", serif;
+}
+
+.work-divider {
+  width: 100%;
+  height: 1px;
+  background: #999;
+  margin-top: 20px;
+}
+
+.gallery {
+  display: flex;
+  gap: 12px;
+  height: min(92svh, 800px);
+}
+
+.panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: flex-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s;
+  text-align: left;
+  display: block;
+  border: none;
+  padding: 0;
+}
+
+.panel.open {
+  flex-grow: 8;
+  cursor: default;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1), 0 40px 80px -40px rgba(0,0,0,0.25);
+}
+
+.spine {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel.open .spine {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spine-index {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #999;
+}
+
+.spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.spine-plus {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s, color 0.3s;
+}
+
+.panel:hover .spine-plus {
+  transform: rotate(90deg);
+  background: #0d0d0d;
+  color: #fff;
+}
+
+.body {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: clamp(20px, 2.4vw, 32px);
+  min-width: min(880px, 100%);
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.panel.open .body {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: 0.25s;
+}
+
+.body-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.body-left::-webkit-scrollbar {
+  display: none;
+}
+
+.kick {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.body-title {
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0;
+}
+
+.body-desc {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #3a3a3a;
+  margin: 0;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features-list li {
+  font-size: 13px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(13,13,13,0.1);
+  text-wrap: balance;
+}
+
+.tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
+  font-size: 12px;
+}
+
+.links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  transition: transform 0.3s, background 0.3s, color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #0d0d0d;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: #222;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #0d0d0d;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.3);
+}
+
+.btn-ghost:hover {
+  background: rgba(13,13,13,0.05);
+}
+
+.workflow {
+  border-radius: 20px;
+  background: #f4f2ee;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.panel.open .workflow {
+  clip-path: inset(0 0 0 0);
+}
+
+.workflow-header {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.workflow-header span {
+  padding: 2px 8px;
+  background: transparent;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.workflow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
+  font-size: 12px;
+}
+
+.workflow-label {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 10.5px;
+  background: #0d0d0d;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 7px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.workflow-desc {
+  flex: 1;
+  font-size: 12px;
+  color: #333;
+}
+
+.arrow {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 0;
+}
+
+.workflow-label {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 10.5px;
+  background: #0d0d0d;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+
+.workflow small {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #999;
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+}
+
+@media (max-width: 860px) {
+  .gallery {
+    flex-direction: column;
+    height: auto;
+    gap: 12px;
   }
 
+  .panel {
+    flex: none;
+    height: 76px;
+    transition: height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .panel.open {
+    height: auto;
+    min-height: 76px;
+  }
+
+  .spine {
+    flex-direction: row;
+    padding: 0 22px;
+  }
+
+  .spine-title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 18px;
+    flex: 1;
+    margin-left: 14px;
+  }
+
+  .body {
+    position: relative;
+    grid-template-columns: 1fr;
+    min-width: 0;
+    display: none;
+    padding-top: 84px;
+  }
+
+  .panel.open .body {
+    display: grid;
+  }
+
+  .panel.open .spine {
+    opacity: 1;
+    pointer-events: none;
+    height: 76px;
+    inset: 0 0 auto 0;
+  }
+
+  .workflow {
+    min-height: 240px;
+  }
+}
+`;
+
+export default function Projects() {
+  const [openIdx, setOpenIdx] = useState(0);
+
   return (
-    <div className="illustrative-ui">
-      <div className="ui-header">
-        <div className="ui-tab">Schema</div>
-        <div className="ui-tab">Flow</div>
-        <div className="ui-tab">Docs</div>
+    <section id="work" className="work-section" aria-label="Selected work">
+      <style>{css}</style>
+      <div className="work-wrap">
+        <div className="work-header">
+          <h2 className="work-label">03 — SELECTED WORK</h2>
+          <h3 className="work-title">
+            Things I've <span className="work-subtitle">built.</span>
+          </h3>
+          <div className="work-divider" />
+        </div>
+
+        <div className="gallery">
+          {PROJECTS.map((project, idx) => (
+            <button
+              key={project.id}
+              className={`panel ${idx === openIdx ? "open" : ""}`}
+              onMouseEnter={() => setOpenIdx(idx)}
+              onClick={() => setOpenIdx(idx)}
+              onFocus={() => setOpenIdx(idx)}
+              tabIndex={0}
+              aria-label={`${project.title}${idx === openIdx ? "" : " — click to open"}`}
+              aria-expanded={idx === openIdx}
+            >
+              <div className="spine" aria-hidden="true">
+                <span className="spine-index">{project.index}</span>
+                <span className="spine-title">{project.title}</span>
+                <span className="spine-plus">+</span>
+              </div>
+
+              <div className="body">
+                <div className="body-left">
+                  <p className="kick">{project.kicker}</p>
+                  <h3 className="body-title">{project.title}</h3>
+                  <p className="body-desc">{project.description}</p>
+                  <ul className="features-list">
+                    {project.features.map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+                  <div className="tech-chips">
+                    {project.tech.map((t) => (
+                      <span key={t} className="tech-chip">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="links">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-ghost"
+                      >
+                        {project.liveLabel} ↗
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div className="workflow">
+                  <div className="workflow-header">
+                    <span>SCHEMA</span>
+                    <span>FLOW</span>
+                    <span>DOCS</span>
+                  </div>
+                  {project.workflow?.map((step, i) => (
+                    <div key={i}>
+                      <div className="workflow-row">
+                        <span className="workflow-label">{step.label}</span>
+                        <span className="workflow-desc">{step.desc}</span>
+                      </div>
+                      {i < (project.workflow?.length || 0) - 1 && (
+                        <div className="arrow">↓</div>
+                      )}
+                    </div>
+                  ))}
+                  <small>Illustrative</small>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
-
-      <div className="ui-content">
-        {mockRows.map((row, idx) => (
-          <div key={idx} className="ui-row">
-            <span className="ui-tag">{row.tag}</span>
-            <span className="ui-text">{row.text}</span>
-            {idx < mockRows.length - 1 && <div className="ui-arrow">↓</div>}
-          </div>
-        ))}
-      </div>
-
-      <div className="ui-footer">ILLUSTRATIVE UI</div>
-
-      <style>{`
-        .illustrative-ui {
-          display: flex;
-          flex-direction: column;
-          background: #f4f2ee;
-          border: 1px solid rgba(13, 13, 13, 0.08);
-          border-radius: 28px;
-          padding: 20px;
-          height: 100%;
-          overflow: hidden;
-          position: relative;
-        }
-
-        .ui-header {
-          display: flex;
-          gap: 8px;
-          margin-bottom: 20px;
-        }
-
-        .ui-tab {
-          padding: 6px 12px;
-          border-radius: 6px;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
-          text-transform: uppercase;
-          background: #e9e6e0;
-          color: #666;
-        }
-
-        .ui-tab:first-child {
-          background: #0d0d0d;
-          color: white;
-        }
-
-        .ui-content {
-          flex: 1;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .ui-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          background: white;
-          border: 1px solid rgba(13, 13, 13, 0.08);
-          border-radius: 14px;
-          padding: 12px;
-          font-size: 13px;
-          line-height: 1.4;
-          position: relative;
-        }
-
-        .ui-tag {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
-          text-transform: uppercase;
-          background: #0d0d0d;
-          color: white;
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-weight: 600;
-          flex-shrink: 0;
-          letter-spacing: 0.05em;
-        }
-
-        .ui-text {
-          color: #3a3a3a;
-          flex: 1;
-        }
-
-        .ui-arrow {
-          position: absolute;
-          bottom: -20px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 14px;
-          color: #ccc;
-        }
-
-        .ui-footer {
-          margin-top: 16px;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.14em;
-          color: #999;
-          text-align: right;
-        }
-
-        @media (max-width: 820px) {
-          .illustrative-ui {
-            border-radius: 20px;
-            padding: 16px;
-          }
-
-          .ui-content {
-            gap: 8px;
-          }
-
-          .ui-row {
-            padding: 10px;
-            font-size: 12px;
-          }
-
-          .ui-arrow {
-            bottom: -16px;
-          }
-        }
-      `}</style>
-    </div>
+    </section>
   );
 }

@@ -80,11 +80,11 @@ export default function About() {
 
       <style>{`
         .about {
-          padding: 120px 20px;
+          padding: 60px 20px;
           background: #f4f2ee;
         }
         .about-header {
-          margin-bottom: 80px;
+          margin-bottom: 60px;
         }
         .section-label {
           font-size: 11px;

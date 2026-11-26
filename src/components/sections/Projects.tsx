@@ -2,6 +2,17 @@
 import { useState } from "react";
 import { PROJECTS } from "@/lib/data";
 
+const TECH_ICONS: Record<string, string> = {
+  "Java": "☕",
+  "Spring Boot": "🍃",
+  "JPA": "📊",
+  "SQL": "🗄️",
+  "MySQL": "🗄️",
+  "Docker": "🐳",
+  "JWT": "🔑",
+  "Postman": "📮",
+};
+
 const css = `
 .work-section {
   padding: 60px 20px;
@@ -139,6 +150,7 @@ const css = `
   transform: translateX(24px);
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
+  overflow: hidden;
 }
 
 .panel.open .body {
@@ -155,6 +167,7 @@ const css = `
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
+  padding-right: 8px;
 }
 
 .body-left::-webkit-scrollbar {
@@ -167,6 +180,7 @@ const css = `
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #999;
+  flex-shrink: 0;
 }
 
 .body-title {
@@ -175,6 +189,7 @@ const css = `
   letter-spacing: -0.045em;
   line-height: 1;
   margin: 0;
+  flex-shrink: 0;
 }
 
 .body-desc {
@@ -182,6 +197,7 @@ const css = `
   line-height: 1.55;
   color: #3a3a3a;
   margin: 0;
+  flex-shrink: 0;
 }
 
 .features-list {
@@ -191,6 +207,7 @@ const css = `
   margin: 0;
   padding: 0;
   list-style: none;
+  flex-shrink: 0;
 }
 
 .features-list li {
@@ -204,40 +221,48 @@ const css = `
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 8px;
+  flex-shrink: 0;
 }
 
 .tech-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 12px;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
   font-size: 12px;
+  background: #f9f9f9;
+}
+
+.tech-icon {
+  font-size: 14px;
 }
 
 .links {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: auto;
+  margin-top: 8px;
+  flex-shrink: 0;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 20px;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   text-decoration: none;
   transition: transform 0.3s, background 0.3s, color 0.3s;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -288,6 +313,7 @@ const css = `
   display: flex;
   gap: 8px;
   margin-bottom: 4px;
+  flex-shrink: 0;
 }
 
 .workflow-header span {
@@ -299,6 +325,19 @@ const css = `
   cursor: pointer;
 }
 
+.workflow-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-right: 4px;
+}
+
+.workflow-content::-webkit-scrollbar {
+  display: none;
+}
+
 .workflow-row {
   display: flex;
   align-items: center;
@@ -308,6 +347,7 @@ const css = `
   background: #fff;
   box-shadow: inset 0 0 0 1px rgba(13,13,13,0.1);
   font-size: 12px;
+  flex-shrink: 0;
 }
 
 .workflow-label {
@@ -334,16 +374,7 @@ const css = `
   font-size: 12px;
   line-height: 1;
   padding: 2px 0;
-}
-
-.workflow-label {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
-  font-size: 10.5px;
-  background: #0d0d0d;
-  color: #fff;
-  border-radius: 6px;
-  padding: 2px 7px;
+  flex-shrink: 0;
 }
 
 .workflow small {
@@ -355,6 +386,7 @@ const css = `
   position: absolute;
   right: 14px;
   bottom: 10px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 860px) {
@@ -459,7 +491,8 @@ export default function Projects() {
                   <div className="tech-chips">
                     {project.tech.map((t) => (
                       <span key={t} className="tech-chip">
-                        {t}
+                        <span className="tech-icon">{TECH_ICONS[t] || "⚙️"}</span>
+                        <span>{t}</span>
                       </span>
                     ))}
                   </div>
@@ -493,17 +526,19 @@ export default function Projects() {
                     <span>FLOW</span>
                     <span>DOCS</span>
                   </div>
-                  {project.workflow?.map((step, i) => (
-                    <div key={i}>
-                      <div className="workflow-row">
-                        <span className="workflow-label">{step.label}</span>
-                        <span className="workflow-desc">{step.desc}</span>
+                  <div className="workflow-content">
+                    {project.workflow?.map((step, i) => (
+                      <div key={i}>
+                        <div className="workflow-row">
+                          <span className="workflow-label">{step.label}</span>
+                          <span className="workflow-desc">{step.desc}</span>
+                        </div>
+                        {i < (project.workflow?.length || 0) - 1 && (
+                          <div className="arrow">↓</div>
+                        )}
                       </div>
-                      {i < (project.workflow?.length || 0) - 1 && (
-                        <div className="arrow">↓</div>
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                   <small>Illustrative</small>
                 </div>
               </div>
@@ -514,3 +549,4 @@ export default function Projects() {
     </section>
   );
 }
+
